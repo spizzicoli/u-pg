@@ -1,6 +1,6 @@
 {
   "appId": "it.kurotsume.schedadnd",
-  "appName": "u-piggi",
+  "appName": "U-Pg",
   "webDir": "dist",
   "ios": {
     "contentInset": "never"
