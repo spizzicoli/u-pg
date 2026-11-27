@@ -13,7 +13,7 @@ export default function Background() {
   const [difetti, setDifetti] = useField(['background', 'difetti'])
 
   return (
-    <SectionCard title="Background" className="background-panel">
+    <SectionCard title="Background" className="background-panel" defaultExpanded={false}>
       <Box className="background-panel__name">
         <EditableField value={nomeBg} onChange={setNomeBg} minWidth={160} />
       </Box>

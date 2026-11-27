@@ -17,7 +17,7 @@ export default function Notes() {
   const addNote = () => setNote([...note, 'Nuova nota…'])
 
   return (
-    <SectionCard title="Note del Giocatore" className="notes-panel">
+    <SectionCard title="Note del Giocatore" className="notes-panel" defaultExpanded={false}>
       <Box className="notes-list">
         {note.map((n, i) => (
           <Box key={i} className="notes-list__row">

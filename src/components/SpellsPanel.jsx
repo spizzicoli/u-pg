@@ -117,7 +117,7 @@ export default function SpellsPanel() {
   const slotForLevel = (lv) => slots.find((s) => s.livello === lv)
 
   return (
-    <SectionCard title="Incantesimi" className="spells-panel">
+    <SectionCard title="Incantesimi" className="spells-panel" defaultExpanded={false}>
       <Box className="spells-panel__header">
         <Box className="spells-panel__stat">
           <span className="spells-panel__stat-value">{spellSaveDC}</span>

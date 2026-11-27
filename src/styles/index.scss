@@ -292,34 +292,78 @@ body {
 .section-card {
   background: linear-gradient(175deg, $ink-panel-alt, $ink-panel 70%);
   border: 1px solid $line;
-  border-radius: 8px;
-  padding: 16px 18px 20px;
-  margin-bottom: 18px;
+  border-radius: 6px;
+  margin: 0;
   position: relative;
-  box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 6px 16px -12px rgba(0, 0, 0, 0.6);
+
+  &::before {
+    display: none;
+  }
 
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid $line;
-    position: relative;
+    min-width: 0;
+  }
+
+  &__toggle {
+    appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+    min-height: 42px;
+    padding: 7px 10px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid $gold-bright;
+      outline-offset: -2px;
+    }
+
+    &[aria-expanded='true'] .section-card__expand {
+      transform: rotate(180deg);
+    }
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding-right: 8px;
   }
 
   &__title {
-    position: relative;
-    font-size: 1.05rem;
-    letter-spacing: 0.06em;
+    min-width: 0;
+    font-size: 0.9rem;
+    letter-spacing: 0;
     color: $gold-bright;
     text-transform: uppercase;
-    padding-left: 2px;
+    line-height: 1.2;
+  }
+
+  &__expand {
+    flex-shrink: 0;
+    color: $parchment-dim;
+    transition: transform 0.18s ease;
+  }
+
+  &__body {
+    padding: 10px 12px 12px;
+    border-top: 1px solid $line;
   }
 
   &--large {
     .section-card__title {
-      font-size: 1.2rem;
+      font-size: 0.95rem;
     }
   }
 }
@@ -328,34 +372,52 @@ body {
 // GRID LAYOUT
 // -----------------------------------------------------------
 .sheet-grid-container {
-  padding-top: 22px;
+  display: grid;
+  grid-auto-flow: row dense;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+  padding-top: 14px;
+  padding-bottom: 18px;
   width: 100%;
   max-width: min(1536px, 100vw) !important;
 }
 
 .sheet-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0 20px;
-  align-items: start;
-
-  @media (min-width: 900px) {
-    grid-template-columns: 300px 1.15fr 1fr;
-  }
+  display: contents;
 
   &--bottom {
-    grid-template-columns: 1fr;
-    margin-top: 4px;
-
-    @media (min-width: 900px) {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
+    display: contents;
   }
 
   &__col {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
+    display: contents;
+  }
+}
+
+@media (min-width: 600px) {
+  .sheet-grid-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 800px) {
+  .sheet-grid-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #capacita:has(.section-card__toggle[aria-expanded='true']),
+  #incantesimi:has(.section-card__toggle[aria-expanded='true']),
+  #inventario:has(.section-card__toggle[aria-expanded='true']),
+  #background:has(.section-card__toggle[aria-expanded='true']),
+  #note:has(.section-card__toggle[aria-expanded='true']) {
+    grid-column: span 2;
+  }
+}
+
+@media (min-width: 1200px) {
+  .sheet-grid-container {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
@@ -1206,6 +1268,7 @@ body {
 // -----------------------------------------------------------
 .sheet-footer {
   display: flex;
+  grid-column: 1 / -1;
   align-items: center;
   gap: 14px;
   margin-top: 8px;
@@ -1250,7 +1313,9 @@ body {
   }
 
   .section-card {
-    padding: 12px 12px 16px;
+    &__body {
+      padding: 9px 10px 10px;
+    }
   }
 
   .inventory-list__row {

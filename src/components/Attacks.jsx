@@ -33,7 +33,7 @@ export default function Attacks() {
     ])
 
   return (
-    <SectionCard title="Attacchi" className="attacks-panel">
+    <SectionCard title="Attacchi" className="attacks-panel" defaultExpanded={false}>
       <Box className="attacks-panel__list">
         {attacks.map((a) => {
           const comp = computedById[a.id]

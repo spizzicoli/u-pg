@@ -7,7 +7,7 @@ import EditableField from './EditableField'
 import UsageTracker from './UsageTracker'
 import SectionCard from './SectionCard'
 
-export default function CombatStats() {
+export default function CombatStats({ id }) {
   const [acBase, setAcBase] = useField(['combat', 'acBase'])
   const [acAltriBonus, setAcAltriBonus] = useField(['combat', 'acAltriBonus'])
   const [hpMax, setHpMax] = useField(['combat', 'hpMax'])
@@ -17,7 +17,7 @@ export default function CombatStats() {
   const { ac, initiative } = useDerived()
 
   return (
-    <SectionCard title="Combattimento" className="combat-panel">
+    <SectionCard id={id} title="Combattimento" className="combat-panel">
       <Box className="combat-top">
         <Box className="combat-stat combat-stat--ac">
           <Box className="combat-stat__value">

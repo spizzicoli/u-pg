@@ -104,7 +104,7 @@ export default function FeaturesPanel() {
   const { cdManovre } = useDerived()
 
   return (
-    <SectionCard title="Talenti e Capacità" large className="features-panel">
+    <SectionCard title="Talenti e Capacità" large className="features-panel" defaultExpanded={false}>
       <Box className="features-panel__columns">
         <Box className="features-panel__half">
           <FeatureGroup title="Talenti" path={['featureGroups', 'talenti']} />

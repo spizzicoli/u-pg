@@ -175,7 +175,8 @@ function CharacterSheet() {
           <Box className="sheet-grid__col sheet-grid__col--left">
             <Box id="caratteristiche"><AbilityScores /></Box>
             <Box id="difese"><SavingThrows /></Box>
-            <Box id="combattimento"><CombatStats /><Attacks /></Box>
+            <CombatStats id="combattimento" />
+            <Attacks />
           </Box>
 
           <Box className="sheet-grid__col sheet-grid__col--center">

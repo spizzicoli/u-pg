@@ -40,7 +40,7 @@ export default function Inventory() {
   }
 
   return (
-    <SectionCard title="Inventario" className="inventory-panel">
+    <SectionCard title="Inventario" className="inventory-panel" defaultExpanded={false}>
       <Box className="inventory-panel__capacity">
         <Box className="inventory-panel__capacity-text">
           <span className={overweight ? 'is-over' : ''}>
