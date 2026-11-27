@@ -8,6 +8,7 @@ import { newId } from '../utils/dnd'
 import EditableField from './EditableField'
 import UsageTracker from './UsageTracker'
 import SectionCard from './SectionCard'
+import { isPassiveFeature } from '../utils/features'
 
 function FeatureItem({ item, onUpdate, onRemove }) {
   const hasTracker = Number(item.usiMax) > 0
@@ -80,14 +81,17 @@ function FeatureGroup({ title, path }) {
   return (
     <Box className="features-col">
       <Typography className="features-col__title">{title}</Typography>
-      {items.map((item, i) => (
+      {items
+        .map((item, index) => ({ item, index }))
+        .filter(({ item }) => !isPassiveFeature(item))
+        .map(({ item, index }) => (
         <FeatureItem
           key={item.id}
           item={item}
-          onUpdate={(next) => updateItem(i, next)}
-          onRemove={() => removeItem(i)}
+          onUpdate={(next) => updateItem(index, next)}
+          onRemove={() => removeItem(index)}
         />
-      ))}
+        ))}
       <Button
         size="small"
         onClick={addItem}

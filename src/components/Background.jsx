@@ -1,8 +1,10 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import { useField } from '../context/CharacterContext'
 import EditableField from './EditableField'
 import SectionCard from './SectionCard'
+import { isPassiveFeature } from '../utils/features'
 
 export default function Background() {
   const [nomeBg, setNomeBg] = useField(['background', 'nome'])
@@ -11,6 +13,29 @@ export default function Background() {
   const [ideali, setIdeali] = useField(['background', 'ideali'])
   const [legami, setLegami] = useField(['background', 'legami'])
   const [difetti, setDifetti] = useField(['background', 'difetti'])
+  const [featureGroups, setFeatureGroups] = useField(['featureGroups'])
+
+  const passiveFeatures = Object.entries(featureGroups || {}).flatMap(([group, items]) =>
+    (items || [])
+      .map((item, index) => ({ group, index, item }))
+      .filter(({ item }) => isPassiveFeature(item))
+  )
+
+  const updatePassiveFeature = (group, index, field, value) => {
+    setFeatureGroups({
+      ...featureGroups,
+      [group]: featureGroups[group].map((item, itemIndex) =>
+        itemIndex === index ? { ...item, [field]: value } : item
+      )
+    })
+  }
+
+  const removePassiveFeature = (group, index) => {
+    setFeatureGroups({
+      ...featureGroups,
+      [group]: featureGroups[group].filter((_, itemIndex) => itemIndex !== index)
+    })
+  }
 
   return (
     <SectionCard title="Background" className="background-panel" defaultExpanded={false}>
@@ -39,6 +64,43 @@ export default function Background() {
           <EditableField value={difetti} onChange={setDifetti} multiline fullWidth />
         </Box>
       </Box>
+
+      {passiveFeatures.length > 0 && (
+        <Box className="background-passives">
+          <Typography className="background-passives__title">Capacità passive</Typography>
+          <Box className="background-passives__list">
+            {passiveFeatures.map(({ group, index, item }) => (
+              <Box className="background-passive" key={item.id}>
+                <Box className="background-passive__head">
+                  <Box className="background-passive__name">
+                    <EditableField
+                      value={item.nome}
+                      onChange={(value) => updatePassiveFeature(group, index, 'nome', value)}
+                      fullWidth
+                    />
+                  </Box>
+                  <IconButton
+                    size="small"
+                    onClick={() => removePassiveFeature(group, index)}
+                    aria-label={`Rimuovi ${item.nome}`}
+                    className="background-passive__remove"
+                  >
+                    <DeleteOutlineIcon fontSize="small" />
+                  </IconButton>
+                </Box>
+                <Box className="background-passive__description">
+                  <EditableField
+                    value={item.descrizione}
+                    onChange={(value) => updatePassiveFeature(group, index, 'descrizione', value)}
+                    multiline
+                    fullWidth
+                  />
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      )}
     </SectionCard>
   )
 }

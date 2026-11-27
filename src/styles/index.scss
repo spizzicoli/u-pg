@@ -936,6 +936,75 @@ body {
   }
 }
 
+.background-passives {
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid $line;
+
+  &__title {
+    display: block;
+    margin-bottom: 8px !important;
+    color: $steel !important;
+    font-family: $font-display !important;
+    font-size: 0.82rem !important;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 6px 12px;
+  }
+}
+
+.background-passive {
+  min-width: 0;
+  padding: 5px 8px;
+  border-left: 2px solid $steel-dim;
+  background: rgba(92, 133, 171, 0.06);
+
+  &__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  &__name {
+    min-width: 0;
+    flex: 1;
+    color: $parchment;
+    font-size: 0.88rem;
+    font-weight: 600;
+
+    .editable-field {
+      display: block;
+      white-space: normal !important;
+    }
+  }
+
+  &__remove {
+    flex-shrink: 0;
+    margin: -4px -6px 0 0 !important;
+    color: $parchment-dim !important;
+
+    &:hover {
+      color: $blood-bright !important;
+    }
+  }
+
+  &__description {
+    color: $parchment-dim;
+    font-size: 0.78rem;
+    line-height: 1.3;
+
+    .editable-field {
+      display: block;
+      white-space: normal !important;
+    }
+  }
+}
+
 // -----------------------------------------------------------
 // USAGE TRACKER (pallini utilizzi)
 // -----------------------------------------------------------
