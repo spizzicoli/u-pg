@@ -261,6 +261,26 @@ body {
   }
 }
 
+@media (min-width: 900px) {
+  .char-header {
+    padding: 16px 24px 30px;
+  }
+
+  .char-header__portrait-frame {
+    width: 112px;
+    height: 112px;
+  }
+
+  .char-header__subline {
+    margin-bottom: 8px;
+  }
+
+  .char-header__meta {
+    gap: 10px 20px;
+    margin-bottom: 4px;
+  }
+}
+
 // -----------------------------------------------------------
 // EDITABLE FIELDS
 // -----------------------------------------------------------
