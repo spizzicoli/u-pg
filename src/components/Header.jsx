@@ -6,7 +6,7 @@ import EditableField from './EditableField'
 export default function Header() {
   const [nome, setNome] = useField(['info', 'nome'])
   const [razza, setRazza] = useField(['info', 'razza'])
-  const [classi] = useField(['info', 'classi'])
+  const [classi, setClassi] = useField(['info', 'classi'])
   const [livelloTotale, setLivelloTotale] = useField(['info', 'livelloTotale'])
   const [allineamento, setAllineamento] = useField(['info', 'allineamento'])
   const [eta, setEta] = useField(['info', 'eta'])
@@ -16,7 +16,11 @@ export default function Header() {
   const [ispirazione, setIspirazione] = useField(['info', 'ispirazioneEroica'])
   const [immagine] = useField(['info', 'immagine'])
 
-  const classiTesto = classi.map((c) => `${c.nome} ${c.livello} (${c.sottoclasse})`).join(' / ')
+  const updateClassLevel = (index, livello) => {
+    setClassi(classi.map((classe, classeIndex) =>
+      classeIndex === index ? { ...classe, livello: Math.max(0, Number(livello) || 0) } : classe
+    ))
+  }
 
   return (
     <Box className="char-header" component="header">
@@ -31,8 +35,21 @@ export default function Header() {
           <Typography variant="h1" className="char-header__name">
             <EditableField value={nome} onChange={setNome} minWidth={200} />
           </Typography>
-          <Typography className="char-header__subline">
-            <EditableField value={razza} onChange={setRazza} minWidth={160} /> · {classiTesto}
+          <Typography component="div" className="char-header__subline">
+            <EditableField value={razza} onChange={setRazza} minWidth={160} /> ·{' '}
+            {classi.map((classe, index) => (
+              <React.Fragment key={classe.nome}>
+                {index > 0 && ' / '}
+                {classe.nome}{' '}
+                <EditableField
+                  value={classe.livello}
+                  onChange={(livello) => updateClassLevel(index, livello)}
+                  type="number"
+                  minWidth={28}
+                />{' '}
+                ({classe.sottoclasse})
+              </React.Fragment>
+            ))}
           </Typography>
 
           <Box className="char-header__meta">

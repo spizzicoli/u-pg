@@ -56,9 +56,19 @@ export default function CombatStats({ id }) {
         <Box className="hit-dice__title">Dadi Vita</Box>
         {hitDice.map((hd, i) => (
           <Box key={hd.id} className="hit-dice__row">
-            <span className="hit-dice__label">
-              {hd.totale}{hd.dado} ({hd.classe})
-            </span>
+            <Box className="hit-dice__label">
+              <EditableField
+                value={hd.totale}
+                onChange={(value) => {
+                  const totale = Math.max(0, Number(value) || 0)
+                  setHitDice(hitDice.map((die, index) =>
+                    index === i ? { ...die, totale, usati: Math.min(die.usati, totale) } : die
+                  ))
+                }}
+                type="number"
+                minWidth={24}
+              />{hd.dado} ({hd.classe})
+            </Box>
             <UsageTracker
               usiMax={hd.totale}
               usiSpesi={hd.usati}

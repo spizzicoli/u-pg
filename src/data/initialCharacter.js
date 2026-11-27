@@ -4,7 +4,7 @@
 //   (convertiti in kg) e sono comunque modificabili liberamente.
 // - I dettagli degli incantesimi (tempo di lancio, gittata, componenti,
 //   effetti) sono quelli ufficiali del Manuale del Giocatore, con i danni
-//   dei trucchetti calcolati per un personaggio di livello 11 (3 dadi).
+//   dei trucchetti calcolati per un personaggio di livello 12 (3 dadi).
 // - Il trucchetto "Passo di Gelo" indicato nel file originale non
 //   corrisponde a un nome ufficiale: i dati riportati sono quelli di
 //   "Raggio di Gelo" (Ray of Frost), l'incantesimo più vicino per tema ed
@@ -21,10 +21,10 @@ const initialCharacter = {
     immagine: '/kurotsume.png',
     razza: 'Shadar-Kai (Morte)',
     classi: [
-      { nome: 'Guerriero', sottoclasse: 'Maestro di Battaglia', livello: 8 },
+      { nome: 'Guerriero', sottoclasse: 'Maestro di Battaglia', livello: 9 },
       { nome: 'Stregone', sottoclasse: 'Ombra', livello: 3 }
     ],
-    livelloTotale: 11,
+    livelloTotale: 12,
     allineamento: 'Neutrale',
     eta: 27,
     taglia: 'Media',
@@ -76,11 +76,11 @@ const initialCharacter = {
     acBase: 18,
     acDexBonus: true,
     acAltriBonus: 0,
-    hpMax: 120,
-    hpCurrent: 120,
+    hpMax: 134,
+    hpCurrent: 134,
     hpTemp: 0,
     hitDice: [
-      { id: 'hd-guerriero', dado: 'd10', classe: 'Guerriero', totale: 8, usati: 0 },
+      { id: 'hd-guerriero', dado: 'd10', classe: 'Guerriero', totale: 9, usati: 0 },
       { id: 'hd-stregone', dado: 'd6', classe: 'Stregone', totale: 3, usati: 0 }
     ]
   },
@@ -137,7 +137,7 @@ const initialCharacter = {
       {
         id: id('feat'),
         nome: 'Recuperare Energie',
-        descrizione: 'Azione bonus: recuperi 1d10 + livello da guerriero (8) Punti Ferita. Si ricarica con un riposo breve o lungo.',
+        descrizione: 'Azione bonus: recuperi 1d10 + livello da guerriero (9) Punti Ferita. Si ricarica con un riposo breve o lungo.',
         usiMax: 1,
         usiSpesi: 0
       },
