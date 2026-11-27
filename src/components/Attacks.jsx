@@ -10,7 +10,7 @@ import SectionCard from './SectionCard'
 
 export default function Attacks() {
   const [attacks, setAttacks] = useField(['attacks'])
-  const { attacks: computed } = useDerived()
+  const { attacks: computed, mods, prof } = useDerived()
 
   const computedById = Object.fromEntries(computed.map((a) => [a.id, a]))
 
@@ -37,6 +37,10 @@ export default function Attacks() {
       <Box className="attacks-panel__list">
         {attacks.map((a) => {
           const comp = computedById[a.id]
+          const abilityMod = mods[a.abilita] ?? 0
+          const magicBonus = Number(a.bonusMagico) || 0
+          const extraDamage = Number(a.bonusDannoExtra) || 0
+
           return (
             <Box key={a.id} className="attack-card">
               <Box className="attack-card__head">
@@ -106,9 +110,25 @@ export default function Attacks() {
                 </Box>
               </Box>
 
-              <Box className="attack-card__damage">
-                {comp ? `${a.dadoDanno} ${fmtMod(comp.bonusDanno)} · ${a.tipoDanno}` : ''}
-              </Box>
+              {comp && (
+                <Box className="attack-card__calculations">
+                  <Box className="attack-card__calculation">
+                    <span className="attack-card__calculation-label">Per colpire</span>
+                    <span className="attack-card__calculation-formula">
+                      d20 + {abilityShort[a.abilita]} ({fmtMod(abilityMod)}) + competenza ({fmtMod(prof)})
+                      {' + '}magico ({fmtMod(magicBonus)}) = <strong>{fmtMod(comp.bonusAttacco)}</strong>
+                    </span>
+                  </Box>
+                  <Box className="attack-card__calculation">
+                    <span className="attack-card__calculation-label">Danni</span>
+                    <span className="attack-card__calculation-formula">
+                      {a.dadoDanno} + {abilityShort[a.abilita]} ({fmtMod(abilityMod)})
+                      {' + '}magico ({fmtMod(magicBonus)}) + extra ({fmtMod(extraDamage)}) ={' '}
+                      <strong>{a.dadoDanno} {fmtMod(comp.bonusDanno)}</strong> {a.tipoDanno}
+                    </span>
+                  </Box>
+                </Box>
+              )}
 
               <Box className="attack-card__tags">
                 <EditableField
