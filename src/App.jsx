@@ -173,10 +173,14 @@ function CharacterSheet() {
       <Container maxWidth="xl" className="sheet-grid-container">
         <Box className="sheet-grid">
           <Box className="sheet-grid__col sheet-grid__col--left">
-            <Box id="caratteristiche"><AbilityScores /></Box>
-            <Box id="difese"><SavingThrows /></Box>
-            <CombatStats id="combattimento" />
-            <Attacks />
+            <Box className="sheet-grid__pair">
+              <Box id="caratteristiche"><AbilityScores /></Box>
+              <Box id="difese"><SavingThrows /></Box>
+            </Box>
+            <Box className="sheet-grid__pair">
+              <CombatStats id="combattimento" />
+              <Attacks />
+            </Box>
           </Box>
 
           <Box className="sheet-grid__col sheet-grid__col--center">

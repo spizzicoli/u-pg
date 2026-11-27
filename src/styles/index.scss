@@ -413,10 +413,23 @@ body {
   &__col {
     display: contents;
   }
+
+  &__pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 8px;
+    min-width: 0;
+  }
 }
 
 @media (min-width: 600px) {
   .sheet-grid-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sheet-grid__pair {
+    grid-column: span 2;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
@@ -446,19 +459,15 @@ body {
 // -----------------------------------------------------------
 .ability-scores__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-
-  @media (min-width: 900px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
 }
 
 .ability-card {
   position: relative;
   border: 1px solid $line;
   border-radius: 10px;
-  padding: 10px 6px 8px;
+  padding: 7px 4px 6px;
   text-align: center;
   background: $ink-raised;
   @include plaque-corners;
@@ -472,7 +481,7 @@ body {
 
   &__mod {
     font-family: $font-display;
-    font-size: 1.6rem;
+    font-size: 1.35rem;
     color: $steel;
     line-height: 1.1;
     margin: 2px 0;
