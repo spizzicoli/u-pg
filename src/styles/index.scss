@@ -417,9 +417,18 @@ body {
   &__pair {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    align-items: start;
+    align-items: stretch;
     gap: 8px;
     min-width: 0;
+
+    > * {
+      display: flex;
+      min-width: 0;
+    }
+
+    .section-card {
+      flex: 1;
+    }
   }
 }
 
