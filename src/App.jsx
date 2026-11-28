@@ -22,6 +22,7 @@ import SportsMartialArtsIcon from '@mui/icons-material/SportsMartialArts'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
 import BackpackIcon from '@mui/icons-material/Backpack'
+import CheckroomIcon from '@mui/icons-material/Checkroom'
 import HistoryEduIcon from '@mui/icons-material/HistoryEdu'
 import NotesIcon from '@mui/icons-material/Notes'
 import { useCharacterSync } from './context/CharacterContext'
@@ -35,6 +36,7 @@ import Attacks from './components/Attacks'
 import FeaturesPanel from './components/FeaturesPanel'
 import SpellsPanel from './components/SpellsPanel'
 import Inventory from './components/Inventory'
+import Equipment from './components/Equipment'
 import Background from './components/Background'
 import Notes from './components/Notes'
 
@@ -131,6 +133,7 @@ const quickSections = [
   { id: 'capacita', label: 'Capacità', icon: <AutoAwesomeIcon /> },
   { id: 'incantesimi', label: 'Incantesimi', icon: <MenuBookIcon /> },
   { id: 'inventario', label: 'Inventario', icon: <BackpackIcon /> },
+  { id: 'equipaggiamento', label: 'Equipaggiamento', icon: <CheckroomIcon /> },
   { id: 'background', label: 'Background', icon: <HistoryEduIcon /> },
   { id: 'note', label: 'Note', icon: <NotesIcon /> }
 ]
@@ -174,12 +177,13 @@ function CharacterSheet() {
         <Box className="sheet-grid">
           <Box className="sheet-grid__col sheet-grid__col--left">
             <Box className="sheet-grid__pair">
-              <Box id="caratteristiche"><AbilityScores /></Box>
-              <Box id="difese"><SavingThrows /></Box>
-            </Box>
-            <Box className="sheet-grid__pair">
               <CombatStats id="combattimento" />
               <Attacks />
+            </Box>
+            <Box id="equipaggiamento"><Equipment /></Box>
+            <Box className="sheet-grid__pair">
+              <Box id="caratteristiche"><AbilityScores /></Box>
+              <Box id="difese"><SavingThrows /></Box>
             </Box>
           </Box>
 

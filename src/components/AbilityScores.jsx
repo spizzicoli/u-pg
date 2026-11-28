@@ -9,7 +9,7 @@ import SectionCard from './SectionCard'
 export default function AbilityScores() {
   const c = useCharacter()
   const dispatch = useCharacterDispatch()
-  const { mods } = useDerived()
+  const { mods, abilityScores, equipmentAbilityBonuses } = useDerived()
 
   const setScore = (ab, v) => dispatch({ type: 'SET_PATH', path: ['abilities', ab], value: v })
 
@@ -22,12 +22,17 @@ export default function AbilityScores() {
             <Box className="ability-card__mod">{fmtMod(mods[ab])}</Box>
             <Box className="ability-card__score">
               <EditableField
-                value={c.abilities[ab]}
-                onChange={(v) => setScore(ab, v)}
+                value={abilityScores[ab]}
+                onChange={(v) => setScore(ab, Number(v) - equipmentAbilityBonuses[ab])}
                 type="number"
                 variant="stat"
               />
             </Box>
+            {equipmentAbilityBonuses[ab] !== 0 && (
+              <Box className="ability-card__equipment-bonus">
+                Equipaggiamento {equipmentAbilityBonuses[ab] > 0 ? '+' : ''}{equipmentAbilityBonuses[ab]}
+              </Box>
+            )}
             <Box className="ability-card__short">{abilityShort[ab]}</Box>
           </Box>
         ))}

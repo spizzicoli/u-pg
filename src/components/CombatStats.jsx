@@ -1,5 +1,6 @@
-import React from 'react'
-import { Box } from '@mui/material'
+import React, { useState } from 'react'
+import { Box, Button, TextField } from '@mui/material'
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline'
 import { useField } from '../context/CharacterContext'
 import useDerived from '../hooks/useDerived'
 import { fmtMod } from '../utils/dnd'
@@ -8,6 +9,7 @@ import UsageTracker from './UsageTracker'
 import SectionCard from './SectionCard'
 
 export default function CombatStats({ id }) {
+  const [damageInput, setDamageInput] = useState('')
   const [acBase, setAcBase] = useField(['combat', 'acBase'])
   const [acAltriBonus, setAcAltriBonus] = useField(['combat', 'acAltriBonus'])
   const [hpMax, setHpMax] = useField(['combat', 'hpMax'])
@@ -16,8 +18,18 @@ export default function CombatStats({ id }) {
   const [hitDice, setHitDice] = useField(['combat', 'hitDice'])
   const { ac, initiative } = useDerived()
 
+  const applyDamage = () => {
+    const damage = Math.max(0, Number(damageInput) || 0)
+    if (!damage) return
+
+    const absorbedByTempHp = Math.min(Number(hpTemp) || 0, damage)
+    setHpTemp((Number(hpTemp) || 0) - absorbedByTempHp)
+    setHpCurrent(Math.max(0, (Number(hpCurrent) || 0) - (damage - absorbedByTempHp)))
+    setDamageInput('')
+  }
+
   return (
-    <SectionCard id={id} title="Combattimento" className="combat-panel">
+    <SectionCard id={id} title="Combattimento" className="combat-panel" defaultExpanded>
       <Box className="combat-top">
         <Box className="combat-stat combat-stat--ac">
           <Box className="combat-stat__value">
@@ -50,6 +62,30 @@ export default function CombatStats({ id }) {
           <span>PF Temporanei</span>
           <EditableField value={hpTemp} onChange={setHpTemp} type="number" variant="stat" />
         </Box>
+      </Box>
+
+      <Box className="damage-entry">
+        <TextField
+          size="small"
+          type="number"
+          label="Danni subiti"
+          value={damageInput}
+          onChange={(event) => setDamageInput(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') applyDamage()
+          }}
+          inputProps={{ min: 0, step: 1 }}
+        />
+        <Button
+          size="small"
+          variant="outlined"
+          color="error"
+          startIcon={<RemoveCircleOutlineIcon />}
+          onClick={applyDamage}
+          disabled={!(Number(damageInput) > 0)}
+        >
+          Applica
+        </Button>
       </Box>
 
       <Box className="hit-dice">

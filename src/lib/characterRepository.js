@@ -2,6 +2,10 @@ import { supabase } from './supabaseClient'
 
 const ABILITIES = ['for', 'des', 'cos', 'int', 'sag', 'car']
 
+function isMissingEquipmentTable(error) {
+  return error?.code === '42P01' || error?.code === 'PGRST205'
+}
+
 // ---------------------------------------------------------------
 // characters (riga principale: anagrafica, caratteristiche, tiri
 // salvezza, combattimento, background)
@@ -119,7 +123,8 @@ export async function loadCharacterData(characterId) {
     { data: slots, error: slotsErr },
     { data: hitDice, error: hitDiceErr },
     { data: inventory, error: inventoryErr },
-    { data: notes, error: notesErr }
+    { data: notes, error: notesErr },
+    { data: equipment, error: equipmentErr }
   ] = await Promise.all([
     supabase.from('characters').select('*').eq('id', characterId).single(),
     supabase.from('character_classes').select('*').eq('character_id', characterId).order('ordine'),
@@ -130,12 +135,14 @@ export async function loadCharacterData(characterId) {
     supabase.from('spell_slots').select('*').eq('character_id', characterId).order('livello'),
     supabase.from('hit_dice').select('*').eq('character_id', characterId).order('ordine'),
     supabase.from('inventory_items').select('*').eq('character_id', characterId).order('ordine'),
-    supabase.from('player_notes').select('*').eq('character_id', characterId).order('ordine')
+    supabase.from('player_notes').select('*').eq('character_id', characterId).order('ordine'),
+    supabase.from('equipment_items').select('*').eq('character_id', characterId).order('ordine')
   ])
 
   const firstError =
     charErr || classesErr || skillsErr || attacksErr || featuresErr || spellsErr || slotsErr ||
-    hitDiceErr || inventoryErr || notesErr
+    hitDiceErr || inventoryErr || notesErr ||
+    (equipmentErr && !isMissingEquipmentTable(equipmentErr) ? equipmentErr : null)
   if (firstError) throw firstError
 
   const base = rowToCharacterPartial(charRow)
@@ -213,6 +220,17 @@ export async function loadCharacterData(characterId) {
   }))
 
   base.note = (notes || []).map((n) => n.testo)
+  base.equipmentStorageReady = !equipmentErr
+  base.equipment = (equipment || []).map((item) => ({
+    id: item.id,
+    nome: item.nome,
+    slot: item.slot,
+    equipaggiato: item.equipaggiato,
+    bonusCA: item.bonus_ca,
+    caratteristica: item.caratteristica || '',
+    bonusCaratteristica: item.bonus_caratteristica,
+    effetti: item.effetti || ''
+  }))
 
   return base
 }
@@ -321,10 +339,22 @@ export async function saveCharacterData(characterId, state) {
     testo
   }))
 
+  const equipmentRows = (state.equipment || []).map((item, i) => ({
+    character_id: characterId,
+    ordine: i,
+    nome: item.nome,
+    slot: item.slot || 'Altro',
+    equipaggiato: !!item.equipaggiato,
+    bonus_ca: Number(item.bonusCA) || 0,
+    caratteristica: item.caratteristica || null,
+    bonus_caratteristica: Number(item.bonusCaratteristica) || 0,
+    effetti: item.effetti || ''
+  }))
+
   const { error: updErr } = await supabase.from('characters').update(charRow).eq('id', characterId)
   if (updErr) throw updErr
 
-  await Promise.all([
+  const childWrites = [
     replaceChildren('character_classes', classRows),
     replaceChildren('skills', skillRows),
     replaceChildren('attacks', attackRows),
@@ -334,5 +364,9 @@ export async function saveCharacterData(characterId, state) {
     replaceChildren('hit_dice', hitDiceRows),
     replaceChildren('inventory_items', inventoryRows),
     replaceChildren('player_notes', noteRows)
-  ])
+  ]
+  if (state.equipmentStorageReady !== false) {
+    childWrites.push(replaceChildren('equipment_items', equipmentRows))
+  }
+  await Promise.all(childWrites)
 }

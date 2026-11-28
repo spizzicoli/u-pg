@@ -387,6 +387,9 @@ const initialCharacter = {
     { id: id('item'), nome: 'Mantello Distorcente', descrizione: 'Ultimo cimelio del Clan della Luna Nera.', peso: 0.5, quantita: 1 }
   ],
 
+  equipment: [],
+  equipmentStorageReady: true,
+
   background: {
     nome: 'Clan della Luna Nera',
     testo:

@@ -4,7 +4,7 @@
 -- Esegui questo intero script una sola volta in:
 -- Supabase → SQL Editor → New query → incolla → Run.
 --
--- Crea 10 tabelle relazionali (una per ogni sezione modificabile
+-- Crea 11 tabelle relazionali (una per ogni sezione modificabile
 -- della scheda) più le policy di sicurezza necessarie per farle
 -- usare all'app direttamente con la chiave "anon".
 --
@@ -185,7 +185,23 @@ create table if not exists inventory_items (
 );
 
 -- ---------------------------------------------------------
--- 10) player_notes — note libere del giocatore
+-- 10) equipment_items — oggetti indossati e bonus applicabili
+-- ---------------------------------------------------------
+create table if not exists equipment_items (
+  id                    uuid primary key default gen_random_uuid(),
+  character_id          uuid not null references characters(id) on delete cascade,
+  ordine                integer not null default 0,
+  nome                  text not null,
+  slot                  text not null default 'Altro',
+  equipaggiato          boolean not null default true,
+  bonus_ca              integer not null default 0,
+  caratteristica        text check (caratteristica in ('for','des','cos','int','sag','car')),
+  bonus_caratteristica  integer not null default 0,
+  effetti               text not null default ''
+);
+
+-- ---------------------------------------------------------
+-- 11) player_notes — note libere del giocatore
 -- ---------------------------------------------------------
 create table if not exists player_notes (
   id            uuid primary key default gen_random_uuid(),
@@ -205,6 +221,7 @@ create index if not exists idx_spells_char    on spells(character_id);
 create index if not exists idx_slots_char     on spell_slots(character_id);
 create index if not exists idx_hitdice_char   on hit_dice(character_id);
 create index if not exists idx_inventory_char on inventory_items(character_id);
+create index if not exists idx_equipment_char on equipment_items(character_id);
 create index if not exists idx_notes_char     on player_notes(character_id);
 
 -- ---------------------------------------------------------
@@ -236,7 +253,7 @@ begin
   for t in
     select unnest(array[
       'characters','character_classes','skills','attacks','feature_items',
-      'spells','spell_slots','hit_dice','inventory_items','player_notes'
+      'spells','spell_slots','hit_dice','inventory_items','equipment_items','player_notes'
     ])
   loop
     execute format('alter table %I enable row level security;', t);

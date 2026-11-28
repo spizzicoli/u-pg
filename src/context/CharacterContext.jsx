@@ -60,8 +60,11 @@ export function CharacterProvider({ children }) {
 
         if (isEmpty) {
           // Progetto Supabase appena creato: popoliamo con i dati di partenza di Kurotsume.
-          await saveCharacterData(id, initialCharacter)
-          data = initialCharacter
+          data = {
+            ...initialCharacter,
+            equipmentStorageReady: data.equipmentStorageReady
+          }
+          await saveCharacterData(id, data)
         }
 
         if (!cancelled) {
@@ -110,8 +113,14 @@ export function CharacterProvider({ children }) {
 
   const resetToDefaults = useCallback(() => {
     skipNextSaveRef.current = false
-    dispatch({ type: 'LOAD', payload: initialCharacter })
-  }, [])
+    dispatch({
+      type: 'LOAD',
+      payload: {
+        ...initialCharacter,
+        equipmentStorageReady: state?.equipmentStorageReady ?? true
+      }
+    })
+  }, [state])
 
   const syncValue = useMemo(
     () => ({ status: syncStatus, error: syncError, isSaving, resetToDefaults, supabaseReady: !!supabase }),

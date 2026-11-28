@@ -159,125 +159,165 @@ body {
 // -----------------------------------------------------------
 .char-header {
   position: relative;
-  padding: 28px 24px 44px;
+  padding: 10px 24px 14px;
   background:
-    linear-gradient(160deg, rgba(140, 42, 58, 0.18), rgba(92, 133, 171, 0.1) 55%, transparent 80%),
-    linear-gradient(180deg, #14172380 0%, $ink 100%);
+    linear-gradient(90deg, rgba(140, 42, 58, 0.12), transparent 42%),
+    rgba(14, 16, 23, 0.82);
   border-bottom: 1px solid $line-strong;
-  overflow: hidden;
-
-  &::after {
-    // bordo "stracciato" ispirato alla lama spezzata / seta lacerata del clan
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -1px;
-    height: 18px;
-    background: $ink;
-    clip-path: polygon(
-      0% 0%, 4% 100%, 9% 15%, 14% 100%, 19% 20%, 25% 100%, 31% 10%, 37% 100%,
-      43% 25%, 49% 100%, 55% 5%, 61% 100%, 67% 18%, 73% 100%, 79% 8%, 85% 100%,
-      91% 22%, 97% 100%, 100% 0%
-    );
-  }
 
   &__inner {
-    position: relative;
-    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 18px;
     max-width: 1400px;
     margin: 0 auto;
   }
 
   &__portrait-frame {
-    width: 128px;
-    height: 128px;
-    border-radius: 50%;
-    padding: 4px;
-    background: conic-gradient(from 210deg, $gold, $blood-bright, $steel, $gold);
-    box-shadow: 0 0 0 1px $ink, 0 0 26px rgba(140, 42, 58, 0.45), 0 0 0 8px rgba(201, 162, 39, 0.06);
-
-    @media (min-width: 600px) {
-      width: 148px;
-      height: 148px;
-    }
+    position: relative;
+    flex: 0 0 144px;
+    height: 188px;
+    overflow: hidden;
+    border: 1px solid $line-strong;
+    border-radius: 6px;
+    background: $ink-raised;
+    box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.85);
   }
 
   &__portrait {
     width: 100%;
     height: 100%;
-    border-radius: 50%;
     object-fit: cover;
+    object-position: center 28%;
     display: block;
-    border: 3px solid $ink;
   }
 
   &__name {
-    font-family: $font-display;
-    font-weight: 700;
-    font-size: clamp(1.9rem, 4vw, 2.6rem);
-    letter-spacing: 0.03em;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 20px 8px 8px;
+    background: linear-gradient(transparent, rgba(8, 9, 13, 0.96));
     color: $parchment;
-    margin: 0 0 2px;
-    text-shadow: 0 0 24px rgba(140, 42, 58, 0.35);
+    font-family: $font-display;
+    font-size: 1.28rem;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 0 1px 8px #000;
+
+    .editable-field {
+      display: block;
+      white-space: normal !important;
+      border: 0;
+    }
+  }
+
+  &__quick {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
   }
 
   &__subline {
     color: $parchment-dim;
-    font-size: 1.05rem;
+    font-size: 0.92rem;
     font-style: italic;
-    margin-bottom: 14px;
-  }
-
-  &__meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px 26px;
-    margin-bottom: 10px;
-  }
-
-  &__meta-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    font-size: 1rem;
-  }
-
-  &__meta-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: $gold;
-    opacity: 0.85;
   }
 
   &__inspiration {
     color: $parchment-dim;
-    margin-left: -8px;
-    .MuiFormControlLabel-label {
-      font-size: 0.85rem;
-      letter-spacing: 0.04em;
+    margin: 0 !important;
+
+    .MuiCheckbox-root {
+      padding: 6px;
     }
+
+    .MuiFormControlLabel-label {
+      font-size: 0.78rem;
+    }
+  }
+
+  &__info-button {
+    color: $gold-bright !important;
+    border: 1px solid $line-strong !important;
+    border-radius: 50% !important;
   }
 }
 
-@media (min-width: 900px) {
+.char-info-dialog {
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__title .MuiIconButton-root {
+    color: $parchment-dim;
+  }
+}
+
+.char-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  padding: 4px 0 12px;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    color: $parchment;
+
+    > span {
+      color: $gold;
+      font-size: 0.66rem;
+      text-transform: uppercase;
+    }
+  }
+
+  &__item--wide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 599px) {
   .char-header {
-    padding: 16px 24px 30px;
+    padding: 8px 12px 10px;
+
+    &__inner {
+      gap: 12px;
+    }
+
+    &__portrait-frame {
+      flex-basis: 104px;
+      height: 148px;
+    }
+
+    &__quick {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      column-gap: 8px;
+      row-gap: 4px;
+    }
+
+    &__subline {
+      flex-basis: 100%;
+      font-size: 0.78rem;
+    }
+
+    &__inspiration .MuiFormControlLabel-label {
+      font-size: 0.7rem;
+    }
   }
 
-  .char-header__portrait-frame {
-    width: 112px;
-    height: 112px;
-  }
-
-  .char-header__subline {
-    margin-bottom: 8px;
-  }
-
-  .char-header__meta {
-    gap: 10px 20px;
-    margin-bottom: 4px;
+  .char-info-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
 }
 
@@ -426,6 +466,10 @@ body {
       min-width: 0;
     }
 
+    > .section-card {
+      display: block;
+    }
+
     .section-card {
       flex: 1;
     }
@@ -507,6 +551,125 @@ body {
     color: $parchment-dim;
     letter-spacing: 0.1em;
     margin-top: 2px;
+  }
+
+  &__equipment-bonus {
+    margin-top: 3px;
+    color: $gold-bright;
+    font-size: 0.58rem;
+    line-height: 1.1;
+  }
+}
+
+.equipment-panel {
+  &__migration-notice {
+    margin-bottom: 10px;
+    font-size: 0.8rem;
+  }
+}
+
+.equipment-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+  gap: 8px;
+}
+
+.equipment-item {
+  min-width: 0;
+  padding: 7px 9px;
+  border: 1px solid $line;
+  border-left: 2px solid $steel-dim;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.02);
+
+  &.is-equipped {
+    border-left-color: $gold;
+    background: rgba(201, 162, 39, 0.045);
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    min-width: 0;
+
+    > .editable-field {
+      flex: 1;
+      min-width: 0;
+      color: $parchment;
+      font-weight: 600;
+    }
+
+    .MuiCheckbox-root {
+      padding: 3px;
+      color: $parchment-dim;
+    }
+
+    .MuiIconButton-root {
+      color: $parchment-dim;
+      padding: 4px;
+
+      &:hover {
+        color: $blood-bright;
+      }
+    }
+  }
+
+  &__fields {
+    display: grid;
+    grid-template-columns: minmax(76px, 1fr) 54px minmax(92px, 1fr) 48px;
+    align-items: end;
+    gap: 8px;
+    margin: 3px 0 6px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 2px;
+    color: $parchment-dim;
+    font-size: 0.64rem;
+
+    .MuiInputBase-root {
+      color: $parchment;
+      font-size: 0.8rem;
+    }
+
+    .MuiSelect-select {
+      padding: 5px 22px 5px 7px;
+    }
+
+    &--number > .editable-field {
+      color: $gold-bright;
+    }
+  }
+
+  &__effects {
+    color: $parchment-dim;
+    font-size: 0.77rem;
+    line-height: 1.3;
+
+    .editable-field {
+      display: block;
+      white-space: normal !important;
+    }
+  }
+}
+
+.equipment-add {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) 125px 42px;
+  gap: 8px;
+  margin-top: 9px;
+
+  .MuiInputBase-root {
+    color: $parchment;
+  }
+
+  .MuiButton-root {
+    min-width: 0;
+    color: $gold-bright;
   }
 }
 
@@ -623,9 +786,10 @@ body {
 // COMBAT STATS
 // -----------------------------------------------------------
 .combat-top {
-  display: flex;
-  gap: 14px;
-  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 8px;
 }
 
 .combat-stat {
@@ -633,14 +797,14 @@ body {
   text-align: center;
   border: 1px solid $line;
   border-radius: 10px;
-  padding: 10px 6px;
+  padding: 7px 5px;
   background: $ink-raised;
   position: relative;
   @include plaque-corners;
 
   &__value {
     font-family: $font-display;
-    font-size: 2rem;
+    font-size: 1.55rem;
     color: $gold-bright;
     line-height: 1;
   }
@@ -673,9 +837,10 @@ body {
 }
 
 .hp-block {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 14px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 8px;
 
   &__row {
     flex: 1;
@@ -683,7 +848,7 @@ body {
     background: $ink-raised;
     border: 1px solid $line;
     border-radius: 8px;
-    padding: 8px 4px;
+    padding: 6px 3px;
 
     span {
       display: block;
@@ -696,9 +861,33 @@ body {
 
     .editable-stat {
       font-family: $font-display;
-      font-size: 1.3rem;
+      font-size: 1.12rem;
       color: $blood-bright;
     }
+  }
+}
+
+.damage-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  .MuiTextField-root {
+    width: 128px;
+  }
+
+  .MuiInputBase-root {
+    color: $parchment;
+  }
+
+  .MuiInputLabel-root {
+    color: $parchment-dim;
+  }
+
+  .MuiButton-root {
+    min-width: 0;
+    white-space: nowrap;
   }
 }
 
@@ -1442,19 +1631,6 @@ body {
     -webkit-overflow-scrolling: touch;
     padding-left: 6px;
     padding-right: 6px;
-  }
-
-  .char-header {
-    padding: 20px 14px 36px;
-    text-align: center;
-
-    &__inner {
-      text-align: center;
-    }
-    &__meta,
-    &__inspiration {
-      justify-content: center;
-    }
   }
 
   .section-card {

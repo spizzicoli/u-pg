@@ -6,8 +6,25 @@ export default function useDerived() {
   const c = useCharacter()
 
   return useMemo(() => {
+    const equipmentAbilityBonuses = Object.fromEntries(
+      Object.keys(c.abilities).map((ability) => [ability, 0])
+    )
+    let equipmentAcBonus = 0
+    ;(c.equipment || []).filter((item) => item.equipaggiato).forEach((item) => {
+      equipmentAcBonus += Number(item.bonusCA) || 0
+      if (item.caratteristica in equipmentAbilityBonuses) {
+        equipmentAbilityBonuses[item.caratteristica] += Number(item.bonusCaratteristica) || 0
+      }
+    })
+
+    const abilityScores = Object.fromEntries(
+      Object.entries(c.abilities).map(([ability, score]) => [
+        ability,
+        Number(score) + equipmentAbilityBonuses[ability]
+      ])
+    )
     const mods = Object.fromEntries(
-      Object.entries(c.abilities).map(([k, v]) => [k, abilityMod(v)])
+      Object.entries(abilityScores).map(([k, v]) => [k, abilityMod(v)])
     )
     const prof = proficiencyBonusByLevel(c.info.livelloTotale)
 
@@ -29,7 +46,8 @@ export default function useDerived() {
     const passiveIndagare = 10 + (skillBonusByName.indagare ?? mods.int)
     const passiveIntuizione = 10 + (skillBonusByName.intuizione ?? mods.sag)
 
-    const ac = c.combat.acBase + (c.combat.acDexBonus ? mods.des : 0) + (Number(c.combat.acAltriBonus) || 0)
+    const ac = c.combat.acBase + (c.combat.acDexBonus ? mods.des : 0) +
+      (Number(c.combat.acAltriBonus) || 0) + equipmentAcBonus
     const initiative = mods.des
 
     const attacks = c.attacks.map((a) => {
@@ -46,8 +64,8 @@ export default function useDerived() {
     const spellSaveDC = 8 + prof + mods.car
     const spellAttackBonus = prof + mods.car
 
-    const carryMax = carryCapacity(c.abilities.for)
-    const liftMax = liftCapacity(c.abilities.for)
+    const carryMax = carryCapacity(abilityScores.for)
+    const liftMax = liftCapacity(abilityScores.for)
     const carryCurrent = c.inventory.reduce(
       (sum, item) => sum + (Number(item.peso) || 0) * (Number(item.quantita) || 0),
       0
@@ -55,6 +73,9 @@ export default function useDerived() {
 
     return {
       mods,
+      abilityScores,
+      equipmentAbilityBonuses,
+      equipmentAcBonus,
       prof,
       savingThrows,
       skills,
